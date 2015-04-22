@@ -8,7 +8,7 @@
 
 package 'pound'
 
-key_path = '/etc/ssl/private/midguard.pem'
+key_path = '/etc/ssl/private/midgard.pem'
 
 unless File.file? key_path
   execute 'create pem file' do
