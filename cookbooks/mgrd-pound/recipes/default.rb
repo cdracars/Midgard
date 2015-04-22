@@ -18,19 +18,21 @@ unless File.file? key_path
              -subj '/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com'\
              -keyout midgard.pem  -out midgard.pem"
   end
+end
 
-  cookbook_file '/etc/pound/pound.cfg' do
-    source 'pound.cfg'
-    mode '0644'
-  end
+cookbook_file '/etc/pound/pound.cfg' do
+  source 'pound.cfg'
+  mode '0644'
+  action :create
+end
 
-  cookbook_file '/etc/default/pound' do
-    source 'etc-default-pound'
-    mode '0644'
-  end
+cookbook_file '/etc/default/pound' do
+  source 'etc-default-pound'
+  mode '0644'
+  action :create_if_missing
+end
 
-  # take new config
-  service 'pound' do
-    action :restart
-  end
+# take new config
+service 'pound' do
+  action :restart
 end
