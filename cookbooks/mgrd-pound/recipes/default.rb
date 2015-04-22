@@ -11,14 +11,12 @@ package 'pound'
 key_path = '/etc/ssl/private/midguard.pem'
 
 unless File.file? key_path
-  bash 'create pem file' do
-    user 'root'
+  execute 'create pem file' do
     cwd '/etc/ssl/private'
-    code <<-EOH
-    cd /etc/ssl && openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
-        -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com"\
-            -keyout midgard.pem  -out midgard.pem
-    EOH
+    user 'root'
+    command "openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
+             -subj '/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com'\
+             -keyout midgard.pem  -out midgard.pem"
   end
 
   cookbook_file '/etc/pound/pound.cfg' do
