@@ -15,7 +15,9 @@ unless File.file? key_path
     user 'root'
     cwd '/etc/ssl/private'
     code <<-EOH
-    cd /etc/ssl && openssl req -x509 -newkey rsa:1024 -keyout midgard.pem -out midgard.pem -days 365 -nodes
+    cd /etc/ssl && openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
+        -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com"\
+            -keyout midgard.pem  -out midgard.pem
     EOH
   end
 
