@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rake'
+gem 'berkshelf'
 
 # Uncomment these lines if you want to live on the Edge:
 #
@@ -14,18 +14,5 @@ gem 'rake'
 #   gem "vagrant-omnibus", github: "schisamo/vagrant-omnibus"
 # end
 
-group :unit do
-  gem 'foodcritic'
-end
-
-group :integration do
-  gem 'berkshelf'
-  gem 'test-kitchen'
-  gem 'kitchen-vagrant'
-end
-
-group :development do
-  gem 'guard'
-  gem 'guard-foodcritic'
-  gem 'guard-kitchen'
-end
+gem "test-kitchen"
+gem "kitchen-vagrant"

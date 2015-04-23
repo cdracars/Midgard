@@ -9,6 +9,7 @@ Vagrant.configure(2) do |config|
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
+  config.berkshelf.enabled = true
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
@@ -36,6 +37,7 @@ Vagrant.configure(2) do |config|
     gateway.vm.network "forwarded_port", guest: 80, host: 8080
     gateway.vm.network "public_network", bridge: 'en0: Wi-Fi (AirPort)'
     gateway.vm.network "private_network", ip: "192.168.0.10"
+    gateway.vm.hostname = "gateway.midgard.io"
     gateway.vm.provision "chef_solo" do |chef|
       chef.provisioning_path = "/tmp/vagrant-chef-2"
       chef.roles_path = "roles"
@@ -46,6 +48,7 @@ Vagrant.configure(2) do |config|
   config.vm.define :box1 do |box1|
     box1.vm.network "forwarded_port", guest: 80, host: 8081
     box1.vm.network "private_network", ip: "192.168.0.1"
+    box1.vm.hostname = "box1.midgard.io"
     box1.vm.provision "chef_solo" do |chef|
       chef.provisioning_path = "/tmp/vagrant-chef-3"
       chef.roles_path = "roles"

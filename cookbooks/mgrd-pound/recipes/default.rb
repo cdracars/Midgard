@@ -29,7 +29,7 @@ end
 cookbook_file '/etc/default/pound' do
   source 'etc-default-pound'
   mode '0644'
-  action :create_if_missing
+  action :create
 end
 
 # take new config

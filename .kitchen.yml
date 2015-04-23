@@ -12,5 +12,4 @@ platforms:
 suites:
   - name: default
     run_list:
-      - recipe[aegir2::default]
     attributes:

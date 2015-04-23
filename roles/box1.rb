@@ -5,5 +5,8 @@ run_list(
 )
  
 default_attributes(
-
+  "aegir2" => {
+    "frontend" => "box1.midgard.io",
+    "admin_email" => "webmaster@aegir.midgard.io"
+  }
 )
