@@ -1,10 +1,10 @@
 # Midgard
 
-Instalation Instructions
+Installation Instructions
 -------------
-- requremnets 
-ChefDK
-Vagrant
-Vagrant-Berkshelf Plugin
-Virtualbox
+requiremnets 
+- ChefDK
+- Vagrant
+- Vagrant-Berkshelf Plugin
+- Virtualbox
 
