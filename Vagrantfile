@@ -46,22 +46,37 @@ Vagrant.configure(2) do |config|
       chef.add_role "gateway"
     end
     gateway.trigger.before [:halt, :suspend, :reload] do
-      run "sed -i -r '1,/box1\.midgar\.io/s/box1\.midgard\.io/gateway\.midgard\.io/' /Users/cdracars/.vagrant.d/data/landrush/hosts.json"
+      run "sed -i -r '1,/aegir\.midgar\.io/s/aegir\.midgard\.io/gateway\.midgard\.io/' /Users/cdracars/.vagrant.d/data/landrush/hosts.json"
+    end
+  end
+
+  config.vm.define :varnish do |varnish|
+    varnish.vm.network "forwarded_port", guest: 80, host: 8081
+    varnish.vm.network "private_network", ip: "192.168.0.2"
+    varnish.vm.hostname = "varnish.midgard.io"
+    varnish.vm.provision "chef_solo" do |chef|
+      chef.provisioning_path = "/tmp/vagrant-chef-3"
+      chef.roles_path = "roles"
+      chef.add_role "varnish"
     end
   end
   
-  config.vm.define :box1 do |box1|
-    box1.vm.network "forwarded_port", guest: 80, host: 8081
-    box1.vm.network "private_network", ip: "192.168.0.1"
-    box1.vm.hostname = "box1.midgard.io"
-    box1.vm.provision "chef_solo" do |chef|
-      chef.provisioning_path = "/tmp/vagrant-chef-3"
+  config.vm.define :aegir do |aegir|
+    aegir.vm.network "forwarded_port", guest: 80, host: 8082
+    aegir.vm.network "private_network", ip: "192.168.0.3"
+    aegir.vm.hostname = "aegir.midgard.io"
+    aegir.vm.provision "chef_solo" do |chef|
+      chef.provisioning_path = "/tmp/vagrant-chef-4"
       chef.roles_path = "roles"
-      chef.add_role "box1"
+      chef.add_role "aegir"
     end
-    box1.trigger.after [:up, :resume, :reload] do
-      run "sed -i -r '1,/gateway\.midgard\.io/s/gateway\.midgard\.io/box1\.midgard\.io/' /Users/cdracars/.vagrant.d/data/landrush/hosts.json"
+    aegir.trigger.after [:up, :resume, :reload] do
+      run "sed -i -r '1,/gateway\.midgard\.io/s/gateway\.midgard\.io/aegir\.midgard\.io/' /Users/cdracars/.vagrant.d/data/landrush/hosts.json"
     end
+  end
+
+  config.trigger.after :destroy do
+    run "rm -Rf /Users/cdracars/.vagrant.d/data/landrush/hosts.json"
   end
 
   # Share an additional folder to the guest VM. The first argument is
