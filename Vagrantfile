@@ -10,6 +10,8 @@ Vagrant.configure(2) do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
   config.berkshelf.enabled = true
+  config.landrush.enabled = true
+  config.landrush.tld = 'io'
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
@@ -35,13 +37,16 @@ Vagrant.configure(2) do |config|
   # config.vm.network "public_network"
   config.vm.define :gateway do |gateway|
     gateway.vm.network "forwarded_port", guest: 80, host: 8080
-    gateway.vm.network "public_network", bridge: 'en0: Wi-Fi (AirPort)'
     gateway.vm.network "private_network", ip: "192.168.0.10"
+    gateway.vm.network "public_network", bridge: 'en0: Wi-Fi (AirPort)'
     gateway.vm.hostname = "gateway.midgard.io"
     gateway.vm.provision "chef_solo" do |chef|
       chef.provisioning_path = "/tmp/vagrant-chef-2"
       chef.roles_path = "roles"
       chef.add_role "gateway"
+    end
+    gateway.trigger.before [:halt, :suspend, :reload] do
+      run "sed -i -r '1,/box1\.midgar\.io/s/box1\.midgard\.io/gateway\.midgard\.io/' /Users/cdracars/.vagrant.d/data/landrush/hosts.json"
     end
   end
   
@@ -53,6 +58,9 @@ Vagrant.configure(2) do |config|
       chef.provisioning_path = "/tmp/vagrant-chef-3"
       chef.roles_path = "roles"
       chef.add_role "box1"
+    end
+    box1.trigger.after [:up, :resume, :reload] do
+      run "sed -i -r '1,/gateway\.midgard\.io/s/gateway\.midgard\.io/box1\.midgard\.io/' /Users/cdracars/.vagrant.d/data/landrush/hosts.json"
     end
   end
 
